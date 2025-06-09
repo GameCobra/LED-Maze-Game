@@ -44,43 +44,43 @@ void MoveHead()
   {
     if (position[1] == 0)
       return;
-    Maze[position[0]][position[1]] = "U";
+    Maze[position[1]][position[0]] = "U";
     position[1] -= 1;
-    Maze[position[0]][position[1]] = "N";
+    Maze[position[1]][position[0]] = "N";
   }
 
   if (randNum == 1) //Right
   {
     if (position[0] == 3)
       return;
-    Maze[position[0]][position[1]] = "R";
+    Maze[position[1]][position[0]] = "R";
     position[0] += 1;
-    Maze[position[0]][position[1]] = "N";
+    Maze[position[1]][position[0]] = "N";
   }
 
   if (randNum == 2) //Down
   {
     if (position[1] == 3)
       return;
-    Maze[position[0]][position[1]] = "D";
+    Maze[position[1]][position[0]] = "D";
     position[1] += 1;
-    Maze[position[0]][position[1]] = "N";
+    Maze[position[1]][position[0]] = "N";
   }
 
   if (randNum == 3) //Left
   {
     if (position[0] == 0)
       return;
-    Maze[position[0]][position[1]] = "L";
+    Maze[position[1]][position[0]] = "L";
     position[0] -= 1;
-    Maze[position[0]][position[1]] = "N";
+    Maze[position[1]][position[0]] = "N";
   }
 }
 
 void setup() {
   ClearVLEDs();
   randomSeed(1);
-  MoveHead();
+  //MoveHead();
   
   lc.shutdown(0,false);
   lc.setIntensity(0,0);
@@ -93,11 +93,11 @@ void RefreshVLEDGrid()
   {
     for (int y = 0; y < 5; y++)
     {
-      SetVLED(0,x*2,y*2,true);
-      SetVLED(0,x*2,y*2+1,true);
-      SetVLED(0,x*2,y*2-1,true);
-      SetVLED(0,x*2+1,y*2,true);
-      SetVLED(0,x*2-1,y*2,true);
+      SetVLED(x*2,y*2,true);
+      SetVLED(x*2,y*2+1,true);
+      SetVLED(x*2,y*2-1,true);
+      SetVLED(x*2+1,y*2,true);
+      SetVLED(x*2-1,y*2,true);
     }
   }
   for (int x = 0; x < 4; x++)
@@ -105,20 +105,29 @@ void RefreshVLEDGrid()
     for (int y = 0; y < 4; y++)
     {
       if (Maze[y][x] == "R")
-        SetVLED(0,x*2+1+1,y*2+1,false);
+        SetVLED(x*2+1+1,y*2+1,false);
       if (Maze[y][x] == "L")
-        SetVLED(0,x*2+1-1,y*2+1,false);
+        SetVLED(x*2+1-1,y*2+1,false);
       if (Maze[y][x] == "U")
-        SetVLED(0,x*2+1,y*2+1-1,false);
+        SetVLED(x*2+1,y*2+1-1,false);
       if (Maze[y][x] == "D")
-        SetVLED(0,x*2+1,y*2+1+1,false);
+        SetVLED(x*2+1,y*2+1+1,false);
     }
   }
 }
 
 void loop() {
-  delay(250);
-  MoveHead();
+  for (int i = 0; i < 10; i++)
+    MoveHead();
+  RefreshVLEDGrid();
+  //delay(250);
+  for (int x = 0; x < 8; x++)
+  {
+    for (int y = 0; y < 8; y++)
+    {
+      lc.setLed(0,y,x,VirtualLEDS[x][y]);
+    }
+  }
   
 }
 
