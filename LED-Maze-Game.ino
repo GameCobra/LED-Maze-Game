@@ -78,6 +78,7 @@ void MoveHead()
 }
 
 void setup() {
+  pinMode(8, OUTPUT);
   ClearVLEDs();
   randomSeed(1);
   //MoveHead();
@@ -113,6 +114,13 @@ void RefreshVLEDGrid()
       if (Maze[y][x] == "D")
         SetVLED(x*2+1,y*2+1+1,false);
     }
+  }
+  for (int i = 100; i < 1000; i++)
+  {
+    tone(8, i);
+    delay(10);
+    //noTone(8);
+    //delay(500);
   }
 }
 
