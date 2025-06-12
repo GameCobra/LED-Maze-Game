@@ -1,6 +1,5 @@
 #include <LedControl.h>
 
-
 int shiftX = 0;
 int shiftY = 0;
 
@@ -9,27 +8,21 @@ int CLK = 13;
 int CS = 7;
 LedControl lc = LedControl(DIN, CLK, CS, 0);
 
-
 int VRx = A0;
 int VRy = A1;
-
 
 int leftThreshold = 150;
 int rightThreshold = 850;
 int upThreshold = 150;
 int downThreshold = 850;
 
-
-int playerRow = 5;
-int playerCol = 5;
-
+int playerRow = 11;
+int playerCol = 11;
 
 int attemptedPlayerRow = 5;
 int attemptedPlayerCol = 5;
 
-
 bool VirtualLEDS[14][14];
-
 
 String Maze[7][7] = {
   {"R", "R", "R", "R", "R", "D"},
@@ -39,40 +32,27 @@ String Maze[7][7] = {
   {"R", "R", "R", "R", "R", "D"},
   {"R", "R", "R", "R", "R", "N"}};
 
-
 int position[2] = {5, 5};
-
 
 void playerMove()
 {
   SetVLED(playerCol, playerRow, false);
 
-
   if (analogRead(VRx) < leftThreshold) {
     attemptedPlayerCol = playerCol - 1;
   }
-
 
   if (analogRead(VRx) > rightThreshold) {
     attemptedPlayerCol = playerCol + 1;
   }
 
-
   if (analogRead(VRy) < upThreshold) {
     attemptedPlayerRow = playerRow - 1;
   }
 
-
   if (analogRead(VRy) > downThreshold) {
     attemptedPlayerRow = playerRow + 1;
   }
-/*
-  if (shiftX == 0 && attemptedPlayerCol == 7)
-  {
-    attemptedPlayerRow = playerRow;
-    attemptedPlayerCol = playerCol;
-    shiftX = 5;
-  }*/
 
   if (VirtualLEDS[attemptedPlayerCol][attemptedPlayerRow] == false) {
     playerRow = attemptedPlayerRow;
@@ -82,11 +62,8 @@ void playerMove()
     attemptedPlayerRow = playerRow;
     attemptedPlayerCol = playerCol;
   }
-
-
   SetVLED(playerCol, playerRow, true);
 }
-
 
 void ClearVLEDs()
 {
@@ -124,7 +101,6 @@ void MoveHead()
     Maze[position[1]][position[0]] = "N";
   }
 
-
   if (randNum == 1) //Right
   {
     if (position[0] == 5)
@@ -133,7 +109,6 @@ void MoveHead()
     position[0] += 1;
     Maze[position[1]][position[0]] = "N";
   }
-
 
   if (randNum == 2) //Down
   {
@@ -144,7 +119,6 @@ void MoveHead()
     Maze[position[1]][position[0]] = "N";
   }
 
-
   if (randNum == 3) //Left
   {
     if (position[0] == 0)
@@ -154,7 +128,6 @@ void MoveHead()
     Maze[position[1]][position[0]] = "N";
   }
 }
-
 
 void RefreshVLEDGrid()
 {
@@ -185,6 +158,7 @@ void RefreshVLEDGrid()
   }
 }
 
+
 bool GetVLEDValue(int x, int y)
 {
   if (0 <= x && x < 14 && 0 <= y && y < 14 )
@@ -193,13 +167,13 @@ bool GetVLEDValue(int x, int y)
     return false;
 }
 
+
 void setup()
 {
   Serial.begin(9600);
   lc.shutdown(0, false); // Wake up the 7219
   lc.setIntensity(0, 15); // Full brightness
   lc.clearDisplay(0); // Clear the matrix
-
 
   ClearVLEDs();
   randomSeed(1);
@@ -238,12 +212,6 @@ void loop()
   Serial.print(playerRow);
   if (playerCol >= 7)
   {
-    /*for (int i = 0; i < 7; i++)
-    {
-      shiftX = i;
-      //delay(25);
-      RefreshScreen();
-    }*/
     shiftX = 6;
   }
   if (playerCol <= 6)
@@ -262,7 +230,6 @@ void loop()
   //shiftX += 1;
   //shiftY += 1;
 
-
   if ((playerRow == 1) && (playerCol == 1)) {
       lc.clearDisplay(0); // Clear the matrix
       delay(2000);
@@ -271,10 +238,9 @@ void loop()
         MoveHead();
       }
       RefreshVLEDGrid();
-      playerRow = 5;
-      playerCol = 5;
-      attemptedPlayerRow = 5;
-      attemptedPlayerCol = 5;
+      playerRow = 11;
+      playerCol = 11;
+      attemptedPlayerRow = 11;
+      attemptedPlayerCol = 11;
   }
 }
-
